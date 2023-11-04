@@ -1,1 +1,31 @@
-/* TODO */
+.display {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    height: 50px;
+    width: 210px;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    background-color: lightgray;
+}
+
+.buttons {
+    display: flex;
+}
+
+.row {
+    display: flex;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 50px;
+    border-style: solid;
+    border-radius: 20px;
+    border-width: 2px;
+    background-color: azure;
+}
