@@ -51,45 +51,47 @@ function validLength(s) {
 
 // str -> nada
 function populateDisplay(lastButton) {
-    // SE FOR OPERACAO
-    if (['+', '-', '*', '/', '='].includes(lastButton)) {
-        if (n1 == undefined) {
-            n1 = parseFloat(displayValue);
-            op = lastButton;
-        } else {
-            n2 = parseFloat(displayValue);
-            n1 = operate(op, n1, n2);
-            op = lastButton;
-            displayValue = 0
-            display.textContent = n1;
-            if (lastButton == '=') {
-                n1 = undefined;
-                displayValue = display.textContent;
+    switch (lastButton) {
+        case '+':
+        case '-':
+        case '*':
+        case '/':
+        case '=':
+            if (n1 == undefined) {
+                n1 = parseFloat(displayValue);
+                op = lastButton;
+            } else {
+                n2 = parseFloat(displayValue);
+                n1 = operate(op, n1, n2);
+                op = lastButton;
+                displayValue = 0
+                display.textContent = n1;
+                if (lastButton == '=') {
+                    n1 = undefined;
+                    displayValue = display.textContent;
+                }
             }
-        }
-        newDisplay = true;
-    } 
-    
-    // SE FOR PONTO
-    // TODO: só aceitar um ponto no número
-    else if (lastButton == '.') {
-        displayValue += lastButton;
-        showDisplay(displayValue);
-    }
-
-    // SE FOR O RESTO - NUMERO
-    else {
-        if (newDisplay) {
-            displayValue = lastButton
-            newDisplay = false;
-        } else {
-            const nextDisplayValue = displayValue + lastButton;
-            if (validLength(nextDisplayValue)) {
-                displayValue = nextDisplayValue;
+            newDisplay = true;
+            break;
+        case '.':
+            // TODO: só aceitar um ponto no número
+            displayValue += lastButton;
+            showDisplay(displayValue);
+            break;
+        case 'clear':
+            // TODO na interface: botao clear. Backspace tbm?
+            break;
+        default:
+            if (newDisplay) {
+                displayValue = lastButton
+                newDisplay = false;
+            } else {
+                const nextDisplayValue = displayValue + lastButton;
+                if (validLength(nextDisplayValue)) {
+                    displayValue = nextDisplayValue;
+                }
             }
-        }
-        showDisplay(displayValue);
+            showDisplay(displayValue);
+            break;
     }
-
-    // TODO na interface: botao clear. Backspace tbm?
 }
