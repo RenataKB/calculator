@@ -35,7 +35,7 @@ buttons.forEach((button) => {
 
 showDisplay(displayValue);
 
-// str -> str
+// str -> nada
 function showDisplay(value) {
     // regex para tirar o 0 inicial
     display.textContent = value.replace(/^0+(?!(\.|$))/g,'');
@@ -46,7 +46,7 @@ function validLength(s) {
     // TODO: arrumar; coloquei para tirar o zero inicial que fica
     s = s.replace(/^0+(?!(\.|$))/g,'');
     // aceitar ate 8 digitos, sem contar o . ou -
-    return s.replaceAll(/\.|\-/g, '').length <= 8
+    return s.replaceAll(/\.|\-/g, '').length <= 8;
 }
 
 // str -> nada
@@ -64,7 +64,7 @@ function populateDisplay(lastButton) {
                 n2 = parseFloat(displayValue);
                 n1 = operate(op, n1, n2);
                 op = lastButton;
-                displayValue = 0
+                displayValue = '0';
                 display.textContent = n1;
                 if (lastButton == '=') {
                     n1 = undefined;
@@ -74,16 +74,22 @@ function populateDisplay(lastButton) {
             newDisplay = true;
             break;
         case '.':
-            // TODO: só aceitar um ponto no número
-            displayValue += lastButton;
-            showDisplay(displayValue);
+            if (newDisplay) {
+                displayValue = '0.';
+                newDisplay = false;
+            } else {
+                if (!displayValue.includes('.')) {
+                    displayValue += lastButton;
+                    showDisplay(displayValue);
+                }
+            }
             break;
         case 'clear':
             // TODO na interface: botao clear. Backspace tbm?
             break;
         default:
             if (newDisplay) {
-                displayValue = lastButton
+                displayValue = lastButton;
                 newDisplay = false;
             } else {
                 const nextDisplayValue = displayValue + lastButton;
