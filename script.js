@@ -1,12 +1,17 @@
 add = (n1, n2) => n1 + n2;
 subtract = (n1, n2) => n1 - n2;
 multiply = (n1, n2) => n1 * n2;
-divide = (n1, n2) => n1 / n2; // TODO: n/0 -> Infinity e 0/0 -> NaN
+divide = (n1, n2) => n1 / n2;
 
 let n1, n2, op;
 let newDisplay = false;
+let displayValue = '0';
 
-// str, float e float -> float
+const errorMessage = 'OH NO!';
+const display = document.querySelector('div.display');
+const buttons = document.querySelectorAll('div.button');
+const dotButton = document.querySelector('div.button.dot');
+
 function operate(op, n1, n2) {
     switch (op) {
         case '+':
@@ -22,26 +27,20 @@ function operate(op, n1, n2) {
     }
 }
 
-let displayValue = '0';
-const display = document.querySelector('div.display');
-const buttons = document.querySelectorAll('div.button');
-const dotButton = document.querySelector('div.button.dot');
-
 buttons.forEach((button) => {
     button.addEventListener('click', () => {
-        populateDisplay(button.id);
+        doButtonAction(button.id);
     });
 });
 
 showDisplay(displayValue);
 
-// str -> nada
 function showDisplay(value) {
     // regex para tirar o 0 inicial
+    // TODO: arrendondar saida para decimais longos
     display.textContent = value.replace(/^0+(?!(\.|$))/g,'');
 }
 
-// str -> bool
 function validLength(s) {
     // TODO: arrumar; coloquei para tirar o zero inicial que fica
     s = s.replace(/^0+(?!(\.|$))/g,'');
@@ -49,27 +48,44 @@ function validLength(s) {
     return s.replaceAll(/\.|\-/g, '').length <= 8;
 }
 
-// str -> nada
-function populateDisplay(lastButton) {
+function clearVariables() {
+    op = n1 = n2 = undefined;
+}
+
+function validateAndUpdateDisplay() {
+    n2 = parseFloat(displayValue);
+    if (n2 == 0 & op == '/') {
+        displayValue = errorMessage;
+        return false;
+    } else {
+        n1 = operate(op, n1, n2);
+        displayValue = n1.toString();
+        return true;
+    }
+}
+
+function doButtonAction(lastButton) {
     switch (lastButton) {
         case '+':
         case '-':
         case '*':
         case '/':
-        case '=':
             if (n1 == undefined) {
                 n1 = parseFloat(displayValue);
                 op = lastButton;
             } else {
-                n2 = parseFloat(displayValue);
-                n1 = operate(op, n1, n2);
-                op = lastButton;
-                displayValue = '0';
-                display.textContent = n1;
-                if (lastButton == '=') {
-                    n1 = undefined;
-                    displayValue = display.textContent;
+                if (validateAndUpdateDisplay()) {
+                    op = lastButton;
+                } else {
+                    clearVariables();
                 }
+            }
+            newDisplay = true;
+            break;
+        case '=':
+            if (op) {
+                validateAndUpdateDisplay();
+                clearVariables();
             }
             newDisplay = true;
             break;
@@ -80,12 +96,21 @@ function populateDisplay(lastButton) {
             } else {
                 if (!displayValue.includes('.')) {
                     displayValue += lastButton;
-                    showDisplay(displayValue);
                 }
             }
             break;
         case 'clear':
-            // TODO na interface: botao clear. Backspace tbm?
+            // TODO na interface: botao clear
+            clearVariables();
+            newDisplay = false;
+            displayValue = '0';
+            break;
+        case 'backspace':
+            // TODO na interface: botao backspace
+            displayValue = displayValue.slice(0, -1);
+            if (displayValue == '') {
+                displayValue = '0';
+            }
             break;
         default:
             if (newDisplay) {
@@ -97,7 +122,11 @@ function populateDisplay(lastButton) {
                     displayValue = nextDisplayValue;
                 }
             }
-            showDisplay(displayValue);
             break;
+    }
+    showDisplay(displayValue);
+    if (displayValue == errorMessage) {
+        displayValue = '0';
+        newDisplay = false;
     }
 }
