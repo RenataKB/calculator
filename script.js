@@ -10,7 +10,6 @@ let displayValue = '0';
 const errorMessage = 'OH NO!';
 const display = document.querySelector('div.display');
 const buttons = document.querySelectorAll('div.button');
-const dotButton = document.querySelector('div.button.dot');
 
 function operate(op, n1, n2) {
     switch (op) {
@@ -36,14 +35,16 @@ buttons.forEach((button) => {
 showDisplay(displayValue);
 
 function showDisplay(value) {
-    // regex para tirar o 0 inicial
     // TODO: arrendondar saida para decimais longos
-    display.textContent = value.replace(/^0+(?!(\.|$))/g,'');
+    // regex para tirar o 0 inicial
+    displayValue = display.textContent = value.replace(/^0+(?!(\.|$))/g,'');
+    if (displayValue == errorMessage) {
+        displayValue = '0';
+        newDisplay = false;
+    }
 }
 
 function validLength(s) {
-    // TODO: arrumar; coloquei para tirar o zero inicial que fica
-    s = s.replace(/^0+(?!(\.|$))/g,'');
     // aceitar ate 8 digitos, sem contar o . ou -
     return s.replaceAll(/\.|\-/g, '').length <= 8;
 }
@@ -94,7 +95,7 @@ function doButtonAction(lastButton) {
                 displayValue = '0.';
                 newDisplay = false;
             } else {
-                if (!displayValue.includes('.')) {
+                if (!displayValue.includes('.') & validLength(displayValue+'1')) {
                     displayValue += lastButton;
                 }
             }
@@ -125,8 +126,4 @@ function doButtonAction(lastButton) {
             break;
     }
     showDisplay(displayValue);
-    if (displayValue == errorMessage) {
-        displayValue = '0';
-        newDisplay = false;
-    }
 }
