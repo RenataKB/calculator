@@ -7,7 +7,8 @@ let n1, n2, op;
 let newDisplay = false;
 let displayValue = '0';
 
-const errorMessage = 'OH NO!';
+const ERROR_MESSAGE = 'OH NO!';
+const MAX_DISPLAY_LENGTH = 8;
 const display = document.querySelector('div.display');
 const buttons = document.querySelectorAll('div.button');
 
@@ -35,18 +36,31 @@ buttons.forEach((button) => {
 showDisplay(displayValue);
 
 function showDisplay(value) {
-    // TODO: arrendondar saida para decimais longos
     // regex para tirar o 0 inicial
     displayValue = display.textContent = value.replace(/^0+(?!(\.|$))/g,'');
-    if (displayValue == errorMessage) {
+    if (displayValue == ERROR_MESSAGE) {
         displayValue = '0';
         newDisplay = false;
+    }
+    if (!validLength(displayValue)) {
+        roundLongDisplay(displayValue);
+    }
+}
+
+function roundLongDisplay(longValue) {
+    const [integerPart, decimalPart] = longValue.split('.');
+    const intLength = integerPart.length;
+    if (!longValue.includes('.') | (intLength > MAX_DISPLAY_LENGTH)) {
+        displayValue = display.textContent = ERROR_MESSAGE;
+    } else if (intLength == MAX_DISPLAY_LENGTH) {
+        displayValue = display.textContent = integerPart;
+    } else {
+        displayValue = display.textContent= `${integerPart}.${decimalPart.slice(0, MAX_DISPLAY_LENGTH - intLength)}`;
     }
 }
 
 function validLength(s) {
-    // aceitar ate 8 digitos, sem contar o . ou -
-    return s.replaceAll(/\.|\-/g, '').length <= 8;
+    return s.replaceAll(/\.|\-/g, '').length <= MAX_DISPLAY_LENGTH;
 }
 
 function clearVariables() {
@@ -56,7 +70,7 @@ function clearVariables() {
 function validateAndUpdateDisplay() {
     n2 = parseFloat(displayValue);
     if (n2 == 0 & op == '/') {
-        displayValue = errorMessage;
+        displayValue = ERROR_MESSAGE;
         return false;
     } else {
         n1 = operate(op, n1, n2);
