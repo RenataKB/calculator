@@ -9,8 +9,8 @@ let displayValue = '0';
 
 const ERROR_MESSAGE = 'OH NO!';
 const MAX_DISPLAY_LENGTH = 8;
-const display = document.querySelector('div.display');
-const buttons = document.querySelectorAll('div.button');
+const display = document.querySelector('#display');
+const buttons = document.querySelectorAll('button');
 
 function operate(op, n1, n2) {
     switch (op) {
@@ -48,6 +48,7 @@ function showDisplay(value) {
 }
 
 function roundLongDisplay(longValue) {
+    // TODO: Fix numero negativo
     const [integerPart, decimalPart] = longValue.split('.');
     const intLength = integerPart.length;
     if (!longValue.includes('.') | (intLength > MAX_DISPLAY_LENGTH)) {
@@ -115,17 +116,21 @@ function doButtonAction(lastButton) {
             }
             break;
         case 'clear':
-            // TODO na interface: botao clear
             clearVariables();
             newDisplay = false;
             displayValue = '0';
             break;
         case 'backspace':
-            // TODO na interface: botao backspace
             displayValue = displayValue.slice(0, -1);
             if (displayValue == '') {
                 displayValue = '0';
             }
+            break;
+        case 'sign':
+            // TODO: botao +/-
+            break;
+        case 'percent':
+            // TODO: botao %
             break;
         default:
             if (newDisplay) {

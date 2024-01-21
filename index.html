@@ -8,38 +8,44 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-    <div class="calculator">
-        <div class="display"></div>
+    <main id="calculator">
+        <div id="display"></div>
         <div class="buttons">
             <div class="numbers">
                 <div class="row">
-                    <div id="7" class="button">7</div>
-                    <div id="8" class="button">8</div>
-                    <div id="9" class="button">9</div>
+                    <button id="7" type="button">7</button>
+                    <button id="8" type="button">8</button>
+                    <button id="9" type="button">9</button>
                 </div>
                 <div class="row">
-                    <div id="4" class="button">4</div>
-                    <div id="5" class="button">5</div>
-                    <div id="6" class="button">6</div>
+                    <button id="4" type="button">4</button>
+                    <button id="5" type="button">5</button>
+                    <button id="6" type="button">6</button>
                 </div>
                 <div class="row">
-                    <div id="1" class="button">1</div>
-                    <div id="2" class="button">2</div>
-                    <div id="3" class="button">3</div>
+                    <button id="1" type="button">1</button>
+                    <button id="2" type="button">2</button>
+                    <button id="3" type="button">3</button>
                 </div>
                 <div class="row">
-                    <div id="0" class="button">0</div>
-                    <div id="." class="button" class="dot" >.</div>
-                    <div id="=" class="button">=</div>
+                    <button id="0" type="button">0</button>
+                    <button id="." type="button">.</button>
+                    <button id="=" type="button">=</button>
                 </div>
             </div>
             <div class="operations">
-                <div id="/" class="button">/</div>
-                <div id="*" class="button">x</div>
-                <div id="-" class="button">-</div>
-                <div id="+" class="button">+</div>
+                <button id="/" type="button">/</button>
+                <button id="*" type="button">x</button>
+                <button id="-" type="button">-</button>
+                <button id="+" type="button">+</button>
+            </div>
+            <div class="extras">
+                <button id="clear" type="button">AC</button>
+                <button id="backspace" type="button"><--</button>
+                <button id="sign" type="button">+/-</button>
+                <button id="percent" type="button">%</button>
             </div>
         </div>
-    </div>
+    </main>
 </body>
 </html>
