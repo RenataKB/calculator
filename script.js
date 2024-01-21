@@ -48,9 +48,8 @@ function showDisplay(value) {
 }
 
 function roundLongDisplay(longValue) {
-    // TODO: Fix numero negativo
     const [integerPart, decimalPart] = longValue.split('.');
-    const intLength = integerPart.length;
+    const intLength = integerPart.replace(/\-/g, '').length;
     if (!longValue.includes('.') | (intLength > MAX_DISPLAY_LENGTH)) {
         displayValue = display.textContent = ERROR_MESSAGE;
     } else if (intLength == MAX_DISPLAY_LENGTH) {
@@ -127,10 +126,16 @@ function doButtonAction(lastButton) {
             }
             break;
         case 'sign':
-            // TODO: botao +/-
+            if (displayValue != '0') {
+                if (displayValue.includes('-')) {
+                    displayValue = displayValue.replace(/\-/g, '');
+                } else {
+                    displayValue = '-' + displayValue;
+                }
+            }
             break;
         case 'percent':
-            // TODO: botao %
+            displayValue = (parseFloat(displayValue)/100).toString();
             break;
         default:
             if (newDisplay) {
